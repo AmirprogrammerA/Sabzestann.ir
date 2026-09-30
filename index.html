@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2e7d32">
+  <meta property="og:title" content="سبزستان | راهنمای کاشت و نگهداری">
+<meta property="og:description" content="آموزش تخصصی کاشت سبزیجات و نگهداری از گیاهان آپارتمانی در خانه.">
+<meta property="og:image" content="https:///icon11.png">
+<meta property="og:url" content="https://sanzestan.ir">
+
+    <title>سبزستان | راهنمای جامع کاشت و نگهداری</title>
+    <style>
+        body { font-family: 'Tahoma', sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+        
+        /* لودینگ */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        #loader img { width: 120px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
+
+        /* استایل‌های اصلی */
+        header { text-align: center; padding: 30px; background: #2e7d32; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .controls { padding: 20px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        input { padding: 12px; width: 80%; max-width: 400px; border-radius: 25px; border: 1px solid #ccc; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .filter-btns button { padding: 10px 20px; margin: 5px; border: none; border-radius: 20px; cursor: pointer; background: #e0e0e0; transition: 0.3s; }
+        .filter-btns button.active { background: #2e7d32; color: white; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #eee; text-align: center; transition: transform 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        .footer-contact { background: #333; color: white; text-align: center; padding: 30px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><img src="icon11.png" alt="logo"><p>در حال سبز شدن سبزستان...</p></div>
+
+    <div id="content" style="display:none;">
+        <header>
+            <img src="icon11.png" style="width:70px; border-radius: 50%;" alt="logo">
+            <h1>سبزستان</h1>
+            <p>آموزش حرفه‌ای کاشت و نگهداری گیاهان</p>
+        </header>
+
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="جستجوی گیاه (مثلا: پتوس)...">
+            <div class="filter-btns">
+                <button onclick="filterPlants('همه')" class="active">همه</button>
+                <button onclick="filterPlants('کاشتنی')">کاشتنی</button>
+                <button onclick="filterPlants('نگهداری')">نگهداری</button>
+            </div>
+        </div>
+
+        <div id="grid" class="grid"></div>
+
+        <div class="footer-contact">
+            <p>مشاوره رایگان گیاهان شما</p>
+            <p>برای پرسیدن سوال در مورد گیاه خود در روبیکا، بله و ایتا به شماره زیر پیام دهید:</p>
+            <strong style="color: #ffeb3b; font-size: 1.2rem;">0922-343-8482</strong>
+        </div>
+    </div>
+
+    <script>
+        // دیتای گیاهان طبق لیست شما
+        const plants = [
+            {name: "پتوس (کاشت)", cat: "کاشتنی"}, {name: "عدس", cat: "کاشتنی"},
+            {name: "ذرت", cat: "کاشتنی"}, {name: "هندوانه 🍉", cat: "کاشتنی"},
+            {name: "ریحان", cat: "کاشتنی"}, {name: "شوید", cat: "کاشتنی"},
+            {name: "جعفری", cat: "کاشتنی"}, {name: "لوبیا", cat: "کاشتنی"},
+            {name: "زاموفیلیا", cat: "نگهداری"}, {name: "پتوس (نگهداری)", cat: "نگهداری"},
+            {name: "اگلونما", cat: "نگهداری"}, {name: "برگ انجیری", cat: "نگهداری"}
+        ];
+
+        function render(data) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = data.map(p => `
+                <div class="card">
+                    <h3 style="color: #2e7d32;">${p.name}</h3>
+                    <p>آموزش ${p.cat === 'کاشتنی' ? 'کاشت' : 'نگهداری'}: <br> <b>به زودی...!</b></p>
+                </div>
+            `).join('');
+        }
+
+        function filterPlants(category) {
+            document.querySelectorAll('.filter-btns button').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText === category) btn.classList.add('active');
+            });
+            
+            if(category === 'همه') render(plants);
+            else render(plants.filter(p => p.cat === category));
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const val = e.target.value;
+            render(plants.filter(p => p.name.includes(val)));
+        });
+
+        // لودینگ ۵ ثانیه
+        setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            render(plants);
+        }, 5000); 
+    </script>
+</body>
+</html>
